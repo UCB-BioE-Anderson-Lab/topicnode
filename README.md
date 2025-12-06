@@ -30,6 +30,15 @@ Installation
 
     pip install -r requirements.txt
 
+OpenAI API Key Configuration
+----------------------------
+
+Before running topicnode, create a `.env` file in the project root containing your OpenAI API key:
+
+    OPENAI_API_KEY=sk-proj-0-hj3g
+
+The tool `openai_requests` will automatically load this value so the LLM calls succeed. Ensure the `.env` file is not committed to version control.
+
 Topic File Requirements
 -----------------------
 
