@@ -923,10 +923,8 @@ def run_topic_node(topic_root: str, pdfs_dir: Optional[str] = None) -> RunStats:
 
     if not os.path.exists(topic_root):
         raise RuntimeError(f"Topic root directory does not exist: {topic_root}")
-    if not os.path.isdir(pdfs_dir):
-        raise RuntimeError(f"PDF directory does not exist: {pdfs_dir}")
-    if not os.path.isdir(root_node_dir):
-        raise RuntimeError(f"Root node directory does not exist: {root_node_dir}")
+    ensure_dir(pdfs_dir)
+    ensure_dir(root_node_dir)
 
     topic_path = os.path.join(topic_root, "topic.txt")
     topic_text = read_text_required(topic_path, "topic.txt")

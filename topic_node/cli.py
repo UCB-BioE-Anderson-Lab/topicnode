@@ -6,6 +6,8 @@ import sys
 
 from topic_node.engine import run_topic_node
 from topic_node.summarizer import run_summarization
+from topic_node.harvest import decide_next_harvest_step
+
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
@@ -36,15 +38,18 @@ def main(argv: list[str] | None = None) -> int:
     topic_root = os.path.abspath(args.topic_root)
     pdfs_path = os.path.abspath(args.pdfs_path) if args.pdfs_path else None
 
-    stats = None
     if not summarize_only:
+        decision = decide_next_harvest_step(topic_root=topic_root)
+        if decision is not None:
+            print(decision.message)
+            return decision.exit_code
+
         try:
             stats = run_topic_node(topic_root, pdfs_path)
         except Exception as exc:
             sys.stderr.write(f"Error in engine: {exc}\n")
             return 1
 
-        # Run report
         print("Run report")
         print("==========")
         print(f"Papers processed or reprocessed: {stats.papers_processed}")
@@ -76,6 +81,7 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
